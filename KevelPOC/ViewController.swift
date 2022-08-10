@@ -31,7 +31,6 @@ class ViewController: UIViewController {
             case .success(let response):
                 if let htmlContent = response.decisions["div0"]?[0].contents[0].body {
                     self.decision = response.decisions["div0"]?[0]
-                    print(htmlContent)
                     self.webKit.loadHTMLString(htmlContent, baseURL: Bundle.main.bundleURL)
                 }
             case .failure(let error):
@@ -66,5 +65,8 @@ extension ViewController: WKScriptMessageHandler {
             }
         }
         eventsTextView.text.append("EVENT: \(message.name) \n")
+        if let urlString = message.body as? String, let url = URL(string: urlString) {
+            UIApplication.shared.open(url)
+        }
     }
 }
